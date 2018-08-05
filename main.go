@@ -63,7 +63,7 @@ func init() {
 }
 func main() {
 
-	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request){
+	http.HandleFunc("/asssessments", func(w http.ResponseWriter, req *http.Request){
 			for idx, assesment := range assessmtn {
 				fmt.Fprint(w, fmt.Sprintf("%d) %v <br>", idx, assesment));
 			}
