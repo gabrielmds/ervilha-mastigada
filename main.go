@@ -1,17 +1,16 @@
 package main
 
 import (
+	"html/template"
+	"log"
 	"net/http"
 
 	"./assessment"
-	"log"
-	"html/template"
 )
 
 var assessmtn = []assessment.Assessment{}
 
 var templates = template.Must(template.ParseGlob("assessment/templates/*"))
-
 
 func init() {
 	assessmtn = []assessment.Assessment{
@@ -66,11 +65,10 @@ func init() {
 }
 func main() {
 
-	http.HandleFunc("/assessments", func(w http.ResponseWriter, req *http.Request){
-		err := templates.ExecuteTemplate(w, "assessment_list.html", assessmtn);
-
+	http.HandleFunc("/assessments", func(w http.ResponseWriter, req *http.Request) {
+		err := templates.ExecuteTemplate(w, "assessment_list.html", assessmtn)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError);
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	})
 	log.Fatal(http.ListenAndServe(":8080", nil))
