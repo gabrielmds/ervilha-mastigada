@@ -1,14 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"./assessment"
 	"log"
+	"html/template"
 )
 
 var assessmtn = []assessment.Assessment{}
+
+var templates = template.Must(template.ParseGlob("assessment/templates/*"))
+
 
 func init() {
 	assessmtn = []assessment.Assessment{
@@ -63,10 +66,12 @@ func init() {
 }
 func main() {
 
-	http.HandleFunc("/asssessments", func(w http.ResponseWriter, req *http.Request){
-			for idx, assesment := range assessmtn {
-				fmt.Fprint(w, fmt.Sprintf("%d) %v <br>", idx, assesment));
-			}
+	http.HandleFunc("/assessments", func(w http.ResponseWriter, req *http.Request){
+		err := templates.ExecuteTemplate(w, "assessment_list.html", assessmtn);
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError);
+		}
 	})
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
